@@ -1,0 +1,54 @@
+// install repo
+
+sudo apt update
+sudo apt install git curl  python3 -y
+
+mkdir -p ~/bin
+echo 'export path="$HOME/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+chmod a+x ~/bin/repo
+repo --version
+
+
+repo init -u https://github.com/arm/ai-ml-sdk-manifest -g emulation-layer
+repo sync --no-clone-bundle
+
+
+// install vulkan
+sudo apt update
+sudo apt install libvulkan-dev vulkan-tools
+
+// get ndk
+wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+unzip android-ndk-r25b-linux.zip
+export ANDROID_NDK_HOME=/workspaces/android-ndk-r25b
+
+// android build
+cmake -S . -B build-android-arm64 \
+  -DCMAKE_TOOLCHAIN_FILE=/workspaces/android-ndk-r25b/build/cmake/android.toolchain.cmake \
+  -DANDROID_ABI=arm64-v8a \
+  -DANDROID_PLATFORM=android-33 \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_STANDARD_REQUIRED=ON  \
+  -DBUILD_UNIT_TESTS=OFF \
+  -DVULKANML_HEADERS_PATH=/workspaces/ai-ml-sdk/dependencies/Vulkan-Headers/include \
+  -DTFLITE_HOST_TOOLS_DIR=/workspaces/flatbuffers/build \
+  -GNinja
+
+cmake --build build-android-arm64 -j 16
+
+
+
+
+// build NXDelegate
+cmake --preset debug -G Ninja \
+  -DVULKANML_HEADERS_PATH=/workspaces/ai-ml-sdk/dependencies/Vulkan-Headers/include
+
+cmake --build --preset debug -j 16
+
+
+// flat buffers for android
+git clone https://github.com/google/flatbuffers.git
+cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DFLATBUFFERS_BUILD_FLATC=ON -DFLATBUFFERS_BUILD_TESTS=OFF  
+cmake --build build -j 16
