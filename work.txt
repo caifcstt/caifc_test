@@ -52,3 +52,7 @@ cmake --build --preset debug -j 16
 git clone https://github.com/google/flatbuffers.git
 cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DFLATBUFFERS_BUILD_FLATC=ON -DFLATBUFFERS_BUILD_TESTS=OFF  
 cmake --build build -j 16
+
+
+-set(CMAKE_CXX_STANDARD 20)
++set(CMAKE_CXX_STANDARD 17)
