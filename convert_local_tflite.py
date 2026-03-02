@@ -4,10 +4,10 @@ import os
 
 # ================= 配置区域 =================
 # 1. 输入：你本地的 Float32 TFLite 模型路径
-input_model_path = "model_static.tflite" 
+input_model_path = "resnet50.tflite" 
 
 # 2. 输出：生成的 Int8 全量化模型路径
-output_model_path = "model_static_int8.tflite"
+output_model_path = "resnet50_int8.tflite"
 
 # 3. 输入形状：需要知道模型的输入形状 (例如 [1, 224, 224, 3])
 # 如果不确定，脚本后面会自动检测并打印，你可以先运行一次看看
