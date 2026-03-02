@@ -38,6 +38,11 @@ cmake -S . -B build-android-arm64 \
 
 cmake --build build-android-arm64 -j 16
 
+  // later build so
+  cmake --build build-android-arm64 --target nxdelegate -j16
+        or
+  cd build-android-arm64  ninja nxdelegate -j16
+
 
 
 
