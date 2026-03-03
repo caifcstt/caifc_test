@@ -4,14 +4,14 @@ import os
 
 # ================= 配置区域 =================
 # 1. 输入：你本地的 Float32 TFLite 模型路径
-input_model_path = "resnet50.tflite" 
+input_model_path = "resnet-v2.tflite" 
 
 # 2. 输出：生成的 Int8 全量化模型路径
-output_model_path = "resnet50_int8.tflite"
+output_model_path = "resnet-v2_int8.tflite"
 
 # 3. 输入形状：需要知道模型的输入形状 (例如 [1, 224, 224, 3])
 # 如果不确定，脚本后面会自动检测并打印，你可以先运行一次看看
-input_shape = (1, 3, 224, 224) 
+input_shape = (1, 299, 299, 3) 
 # ===========================================
 
 def representative_dataset():
@@ -86,7 +86,7 @@ def convert():
 if __name__ == "__main__":
     # 自动检测输入形状 (如果用户没改的话)
     # 这是一个辅助功能，防止用户填错形状
-    if input_shape == (1, 3, 224, 224):
+    if input_shape == (1, 299, 299, 3):
         try:
             interpreter = tf.lite.Interpreter(model_path=input_model_path)
             interpreter.allocate_tensors()
